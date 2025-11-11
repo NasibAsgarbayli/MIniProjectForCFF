@@ -4,8 +4,8 @@ namespace Services.Services.Interfaces;
 
 public interface IGroupService
 {
-    void Create(Group courseGroup);
-    void Update(int id, Group courseGroup);
+    void Create(Group group);
+    void Update(int id, Group group);
     void Delete(int id);
     Group GetById(int id);
     List<Group> GetAll();

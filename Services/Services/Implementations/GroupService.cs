@@ -5,31 +5,40 @@ using Services.Services.Interfaces;
 
 namespace Services.Services.Implementations;
 
-public class GroupService: IGroupService
+public class GroupService : IGroupService
 {
     private readonly IGroupRepository _groupRepository;
     public GroupService(IGroupRepository groupRepository)
     {
         _groupRepository = groupRepository;
     }
-    public void Create(Group courseGroup)
+    public void Create(Group group)
     {
-        if (courseGroup is null)
+        if (group is null)
+        {
             throw new ArgumentNullException("Course group cannot be null!");
 
+        }
+
         bool nameExists = _groupRepository.GetAll()
-            .Any(g => g.Name.Equals(courseGroup.Name, StringComparison.OrdinalIgnoreCase));
+            .Any(g => g.Name.Equals(group.Name, StringComparison.OrdinalIgnoreCase));
 
         if (nameExists)
-            throw new AlreadyExist($"A course group with name '{courseGroup.Name}' already exists!");
+        {
 
-        _groupRepository.Create(courseGroup);
+            throw new AlreadyExist($"A course group with name '{group.Name}' already exists!");
+        }
+
+        _groupRepository.Create(group);
     }
 
     public void Delete(int id)
     {
         if (id < 0)
+        {
+
             Console.WriteLine("Id cannot be a negative");
+        }
 
         _groupRepository.Delete(id);
     }
@@ -44,7 +53,10 @@ public class GroupService: IGroupService
             cg.Room.Contains(room, StringComparison.OrdinalIgnoreCase));
 
         if (groups.Count == 0)
-            Console.WriteLine(" with the given room name have not group"); 
+        {
+
+            Console.WriteLine(" with the given room name have not group");
+        }
 
         return groups;
     }
@@ -57,7 +69,10 @@ public class GroupService: IGroupService
             cg.TeacherName.Contains(teacherName, StringComparison.OrdinalIgnoreCase));
 
         if (groups.Count == 0)
-           Console.WriteLine("No course groups found with the given teacher name.");
+        {
+
+            Console.WriteLine("No course groups found with the given teacher name.");
+        }
 
         return groups;
     }
@@ -65,11 +80,17 @@ public class GroupService: IGroupService
     public Group GetById(int id)
     {
         if (id < 0)
-           Console.WriteLine("Id has to be positive numbers!");
+        {
+
+            Console.WriteLine("Id has to be positive numbers!");
+        }
 
         var group = _groupRepository.GetById(id);
         if (group == null)
+        {
             Console.WriteLine("Course group not found!");
+
+        }
 
         return group;
     }
@@ -82,38 +103,56 @@ public class GroupService: IGroupService
             cg.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
 
         if (groups.Count == 0)
+        {
+
             throw new EmptyList("No groups found with the given keyword.");
+        }
 
         return groups;
     }
 
-    public void Update(int id, Group courseGroup)
+    public void Update(int id, Group group)
     {
         if (id < 0)
-            Console.WriteLine("Id has to be positive numbers!"); 
-        if (courseGroup is null)
+        {
+
+            Console.WriteLine("Id has to be positive numbers!");
+        }
+        if (group is null)
+        {
+
             throw new ArgumentNullException("Course group cannot be null!");
+        }
 
         var existingGroup = _groupRepository.GetById(id);
         if (existingGroup == null)
-            Console.WriteLine("Course group not found!");
-
-        if (!string.IsNullOrWhiteSpace(courseGroup.Name))
         {
-            bool nameExists = _groupRepository.GetAll()
-                .Any(g => g.Id != id && g.Name.Equals(courseGroup.Name, StringComparison.OrdinalIgnoreCase));
 
-            if (nameExists)
-                throw new AlreadyExist($"A course group with name '{courseGroup.Name}' already exists!");
-
-            existingGroup.Name = courseGroup.Name;
+            Console.WriteLine("Course group not found!");
         }
 
-        if (!string.IsNullOrWhiteSpace(courseGroup.TeacherName))
-            existingGroup.TeacherName = courseGroup.TeacherName;
+        if (!string.IsNullOrWhiteSpace(group.Name))
+        {
+            bool nameExists = _groupRepository.GetAll()
+                .Any(g => g.Id != id && g.Name.Equals(group.Name, StringComparison.OrdinalIgnoreCase));
 
-        if (!string.IsNullOrWhiteSpace(courseGroup.Room))
-            existingGroup.Room = courseGroup.Room;
+            if (nameExists)
+                throw new AlreadyExist($"A course group with name '{group.Name}' already exists!");
+
+            existingGroup.Name = group.Name;
+        }
+
+        if (!string.IsNullOrWhiteSpace(group.TeacherName))
+        {
+            existingGroup.TeacherName = group.TeacherName;
+
+        }
+
+        if (!string.IsNullOrWhiteSpace(group.Room))
+        {
+
+            existingGroup.Room = group.Room;
+        }
 
         _groupRepository.Update(id, existingGroup);
     }
