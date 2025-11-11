@@ -39,6 +39,7 @@ public class AppController
 
     public void UpdateGroup()
     {
+        Console.WriteLine("Enter Id:");
         int id = Helper.ReadValidatedInt("Enter ID to update:");
         Console.Write("Enter new name: ");
         string newName = Console.ReadLine();
@@ -390,8 +391,8 @@ public class AppController
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("\n -----STUDENT MENU----");
             Console.WriteLine("1. Create");
-            Console.WriteLine("2. Delete");
-            Console.WriteLine("3. Update");
+            Console.WriteLine("2. Update");
+            Console.WriteLine("3. Delete");
             Console.WriteLine("4. GetById");
             Console.WriteLine("5. GetAllByAge");
             Console.WriteLine("6. GetAllByGroupId");
@@ -412,10 +413,10 @@ public class AppController
                     CreateStudent();
                     break;
                 case 2:
-                    DeleteStudent();
+                    UpdateStudent();
                     break;
                 case 3:
-                    UpdateStudent();
+                    DeleteStudent();
                     break;
                 case 4:
                     GetStudentById();
