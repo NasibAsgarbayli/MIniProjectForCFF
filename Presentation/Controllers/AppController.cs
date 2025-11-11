@@ -63,6 +63,7 @@ public class AppController
 
     public void DeleteGroup()
     {
+        Console.WriteLine("Enter Id for delete:");
         int id = Helper.ReadValidatedInt("Enter ID to delete:");
 
         try
