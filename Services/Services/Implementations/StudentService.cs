@@ -27,7 +27,7 @@ public class StudentService : IStudentService
         if (student == null)
         {
 
-            throw new ArgumentNullException("Student cannot be null!");
+            throw new ArgumentNullException("Student cant be null!");
         }
 
         student.Group = group;

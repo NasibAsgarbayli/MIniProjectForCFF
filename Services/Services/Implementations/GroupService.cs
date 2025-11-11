@@ -26,7 +26,7 @@ public class GroupService : IGroupService
         if (nameExists)
         {
 
-            throw new AlreadyExist($"A course group with name '{group.Name}' already exists!");
+            throw new AlreadyExist($"A course group :'{group.Name}' already exists!");
         }
 
         _groupRepository.Create(group);
@@ -37,7 +37,7 @@ public class GroupService : IGroupService
         if (id < 0)
         {
 
-            Console.WriteLine("Id cannot be a negative");
+            Console.WriteLine("Id cant be a negative");
         }
 
         _groupRepository.Delete(id);
@@ -71,7 +71,7 @@ public class GroupService : IGroupService
         if (groups.Count == 0)
         {
 
-            Console.WriteLine("No course groups found with the given teacher name.");
+            Console.WriteLine("No course groups found.");
         }
 
         return groups;
@@ -88,7 +88,7 @@ public class GroupService : IGroupService
         var group = _groupRepository.GetById(id);
         if (group == null)
         {
-            Console.WriteLine("Course group not found!");
+            Console.WriteLine("Course group not found");
 
         }
 
@@ -105,7 +105,7 @@ public class GroupService : IGroupService
         if (groups.Count == 0)
         {
 
-            throw new EmptyList("No groups found with the given keyword.");
+            throw new EmptyList("No groups found ");
         }
 
         return groups;
@@ -137,7 +137,7 @@ public class GroupService : IGroupService
                 .Any(g => g.Id != id && g.Name.Equals(group.Name, StringComparison.OrdinalIgnoreCase));
 
             if (nameExists)
-                throw new AlreadyExist($"A course group with name '{group.Name}' already exists!");
+                throw new AlreadyExist($"A course group: '{group.Name}' already exists!");
 
             existingGroup.Name = group.Name;
         }
