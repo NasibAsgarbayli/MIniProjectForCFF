@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Repository.Context;
 
-namespace Repository.Context
+public class AppDbContext<T>
 {
-    internal class AppDbContext
+    public static List<T> Models { get; set; }
+
+    static AppDbContext()
     {
+        Models = new List<T>();
     }
 }

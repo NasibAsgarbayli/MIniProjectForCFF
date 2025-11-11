@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.Models;
 
-namespace Domain.Models
+public class Student: BaseEntity
 {
-    internal class Student
+    public string Surname { get; set; }
+    public int Age { get; set; }
+    public Group Group { get; set; }
+    public static int id;
+    public Student()
     {
+        Id = id;
+        id++;
     }
 }

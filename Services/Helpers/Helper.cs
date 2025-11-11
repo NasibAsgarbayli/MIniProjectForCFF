@@ -1,12 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace Services.Helpers
+namespace Services.Helpers;
+
+public static class Helper
 {
-    internal class Helper
+    public static void ColorWrite(ConsoleColor color, string text)
     {
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ResetColor();
+    }
+
+    public static string ReadValidatedString(string errorMsg)
+    {
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, @"^[a-zA-Z\s]+$"))
+                return input;
+
+            ColorWrite(ConsoleColor.Red, errorMsg);
+        }
+    }
+
+    public static string ReadLetterOrDigitString(string errorMsg)
+    {
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input) && Regex.IsMatch(input, @"^[a-zA-Z0-9\s]+$"))
+                return input;
+
+            ColorWrite(ConsoleColor.Red, errorMsg);
+        }
+    }
+
+    public static string ReadNonEmptyString(string errorMsg)
+    {
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input))
+                return input;
+
+            ColorWrite(ConsoleColor.Red, errorMsg);
+        }
+    }
+
+    public static int ReadValidatedInt(string errorMsg)
+    {
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int result) && result >= 0)
+                return result;
+
+            ColorWrite(ConsoleColor.Red, errorMsg);
+        }
     }
 }

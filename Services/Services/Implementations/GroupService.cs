@@ -8,7 +8,7 @@ namespace Services.Services.Implementations;
 public class GroupService: IGroupService
 {
     private readonly IGroupRepository _groupRepository;
-    public GroupService(IGroupService groupRepository)
+    public GroupService(IGroupRepository groupRepository)
     {
         _groupRepository = groupRepository;
     }
