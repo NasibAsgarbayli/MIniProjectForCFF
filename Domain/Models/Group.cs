@@ -1,11 +1,15 @@
 namespace Domain.Models;
 
-public class Group
+public class Group:BaseEntity
 {
-	public int Id { get; set; }
-	public string Name { get; set; } = string.Empty;
-	public string Teacher { get; set; } = string.Empty;
-	public string Room { get; set; } = string.Empty;
+    public string TeacherName { get; set; }
+    public string Room { get; set; }
+    public static int id;
+    public Group()
+    {
+        Id = id;
+        id++;
+    }
 }
 
 
