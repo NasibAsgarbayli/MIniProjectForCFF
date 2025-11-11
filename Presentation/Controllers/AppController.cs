@@ -28,10 +28,12 @@ public class AppController
         {
             _groupService.Create(new Group { Name = name, TeacherName = teacher, Room = room });
             Helper.ColorWrite(ConsoleColor.Green, "Group created successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -49,10 +51,12 @@ public class AppController
         {
             _groupService.Update(id, new Group { Name = newName, TeacherName = newTeacher, Room = newRoom });
             Helper.ColorWrite(ConsoleColor.Green, "Group updated successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -64,10 +68,12 @@ public class AppController
         {
             _groupService.Delete(id);
             Helper.ColorWrite(ConsoleColor.Green, "Group deleted successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -79,10 +85,12 @@ public class AppController
         {
             var group = _groupService.GetById(id);
             Console.WriteLine($"ID: {group.Id} | Name: {group.Name} | Teacher: {group.TeacherName} | Room: {group.Room}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -93,10 +101,12 @@ public class AppController
             var all = _groupService.GetAll();
             foreach (var g in all)
                 Console.WriteLine($"ID: {g.Id}. Name: {g.Name} | Teacher: {g.TeacherName} | Room: {g.Room}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -110,10 +120,12 @@ public class AppController
             var list = _groupService.GetAllByTeacherName(teacher);
             foreach (var g in list)
                 Console.WriteLine($"ID: {g.Id}. Name: {g.Name} | Teacher: {g.TeacherName}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -127,10 +139,12 @@ public class AppController
             var list = _groupService.GetAllByRoom(room);
             foreach (var g in list)
                 Console.WriteLine($"ID: {g.Id}. Name: {g.Name} | Room: {g.Room}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -144,10 +158,12 @@ public class AppController
             var list = _groupService.SearchByName(keyword);
             foreach (var g in list)
                 Console.WriteLine($"ID: {g.Id}. Name: {g.Name} | Teacher: {g.TeacherName} | Room: {g.Room}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -232,10 +248,12 @@ public class AppController
         {
             _studentService.Create(groupId, new Student { Name = name, Surname = surname, Age = age });
             Helper.ColorWrite(ConsoleColor.Green, "Student created successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -255,10 +273,12 @@ public class AppController
         {
             _studentService.Update(id, new Student { Name = newName, Surname = newSurname, Age = newAge });
             Helper.ColorWrite(ConsoleColor.Green, "Student updated successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -272,10 +292,12 @@ public class AppController
         {
             _studentService.Delete(id);
             Helper.ColorWrite(ConsoleColor.Green, "Student deleted successfully!");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -289,10 +311,12 @@ public class AppController
         {
             var student = _studentService.GetById(id);
             Console.WriteLine($"ID: {student.Id} | Name: {student.Name} {student.Surname} | Age: {student.Age} | Group: {student.Group?.Name}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -309,10 +333,12 @@ public class AppController
             var list = _studentService.GetAllByAge(age);
             foreach (var s in list)
                 Console.WriteLine($"ID: {s.Id} | Name: {s.Name} {s.Surname} | Age: {s.Age}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -327,10 +353,12 @@ public class AppController
             var list = _studentService.GetAllByGroupId(groupId);
             foreach (var s in list)
                 Console.WriteLine($"ID: {s.Id} | Name: {s.Name} {s.Surname}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 
@@ -345,10 +373,12 @@ public class AppController
             var list = _studentService.SearchByNameOrSurname(keyword);
             foreach (var s in list)
                 Console.WriteLine($"ID: {s.Id} | Name: {s.Name} {s.Surname} | Age: {s.Age}");
+            Helper.PlaySound("notify.wav");
         }
         catch (Exception ex)
         {
             Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
         }
     }
 

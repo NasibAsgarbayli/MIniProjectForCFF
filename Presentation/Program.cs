@@ -7,9 +7,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-      
+        Helper.PlaySound("notify.wav");
 
-        
+
         GroupRepository groupRepository = new();
         StudentRepository studentRepository = new();
         GroupService groupService = new(groupRepository);
@@ -41,16 +41,20 @@ internal class Program
             switch (mainChoice)
             {
                 case 1:
+                    Helper.PlaySound("notify.wav");
                     appController.GroupMenu();
                     break;
                 case 2:
+                    Helper.PlaySound("notify.wav");
                     appController.StudentMenu();
                     break;
                 case 0:
+                    Helper.PlaySound("chimes.wav", async: false);
                     Helper.ColorWrite(ConsoleColor.Green, "Bye!");
                     return;
                 default:
                     Helper.ColorWrite(ConsoleColor.Red, "Invalid menu choice!");
+                    Helper.PlaySound("chord.wav");
                     goto MainInput;
             }
         }
