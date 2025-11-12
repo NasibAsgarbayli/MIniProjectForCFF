@@ -12,7 +12,7 @@ public static class Helper
         Console.ResetColor();
     }
 
-    public static string ReadValidatedString(string errorMsg)
+    public static string CheckString(string errorMsg)
     {
         while (true)
         {
@@ -24,7 +24,7 @@ public static class Helper
         }
     }
 
-    public static string ReadLetterOrDigitString(string errorMsg)
+    public static string CheckLetterOrDigit(string errorMsg)
     {
         while (true)
         {
@@ -36,19 +36,7 @@ public static class Helper
         }
     }
 
-    public static string ReadNonEmptyString(string errorMsg)
-    {
-        while (true)
-        {
-            string input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input))
-                return input;
-
-            ColorWrite(ConsoleColor.Red, errorMsg);
-        }
-    }
-
-    public static int ReadValidatedInt(string errorMsg)
+    public static int CheckInt(string errorMsg)
     {
         while (true)
         {

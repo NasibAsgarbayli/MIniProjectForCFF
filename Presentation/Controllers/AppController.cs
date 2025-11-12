@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Services.Exceptions;
 using Services.Helpers;
 using Services.Services.Implementations;
 
@@ -18,11 +19,11 @@ public class AppController
     public void CreateGroup()
     {
         Console.Write("Enter group name: ");
-        string name = Helper.ReadLetterOrDigitString("Group name is not valid. Enter again:");
+        string name = Helper.CheckLetterOrDigit("Group name is not valid. Enter again:");
         Console.Write("Enter teacher name: ");
-        string teacher = Helper.ReadValidatedString("Teacher name is not valid. Enter again:");
+        string teacher = Helper.CheckString("Teacher name is not valid. Enter again:");
         Console.Write("Enter room: ");
-        string room = Helper.ReadLetterOrDigitString("Room cannot be empty. Enter again:");
+        string room = Helper.CheckLetterOrDigit("Room cannot be empty. Enter again:");
 
         try
         {
@@ -37,51 +38,101 @@ public class AppController
         }
     }
 
+    // UpdateGroup - FIXED
     public void UpdateGroup()
     {
-        Console.WriteLine("Enter Id:");
-        int id = Helper.ReadValidatedInt("Enter ID to update:");
-        Console.Write("Enter new name: ");
-        string newName = Console.ReadLine();
-        Console.Write("Enter new teacher name: ");
-        string newTeacher = Console.ReadLine();
-        Console.Write("Enter new room: ");
-        string newRoom = Console.ReadLine();
+        while (true)
+        {
+            try
+            {
+                Console.Write("Enter Id: ");
+                int id = Helper.CheckInt("Enter ID to update:");
 
-        try
-        {
-            _groupService.Update(id, new Group { Name = newName, TeacherName = newTeacher, Room = newRoom });
-            Helper.ColorWrite(ConsoleColor.Green, "Group updated successfully!");
-            Helper.PlaySound("notify.wav");
-        }
-        catch (Exception ex)
-        {
-            Helper.ColorWrite(ConsoleColor.Red, ex.Message);
-            Helper.PlaySound("chord.wav");
+                // Əvvəlcə ID-nin mövcud olub-olmadığını yoxlayırıq
+                var existing = _groupService.GetById(id);
+
+                // ID düzgündürsə, indi digər məlumatları istəyirik
+                Console.Write("Enter new name: ");
+                string newName = Console.ReadLine();
+                Console.Write("Enter new teacher name: ");
+                string newTeacher = Console.ReadLine();
+                Console.Write("Enter new room: ");
+                string newRoom = Console.ReadLine();
+
+                _groupService.Update(id, new Group { Name = newName, TeacherName = newTeacher, Room = newRoom });
+                Helper.ColorWrite(ConsoleColor.Green, "Group updated successfully!");
+                Helper.PlaySound("notify.wav");
+                break;
+            }
+            catch (NotFoundException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please enter a valid ID or press '0' to cancel:");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
+            catch (ArgumentException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
+            catch (Exception ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
         }
     }
 
+
+    // DeleteGroup - FIXED
     public void DeleteGroup()
     {
-        Console.WriteLine("Enter Id for delete:");
-        int id = Helper.ReadValidatedInt("Enter ID to delete:");
+        while (true)
+        {
+            try
+            {
+                Console.Write("Enter Id for delete: ");
+                int id = Helper.CheckInt("Enter ID to delete:");
 
-        try
-        {
-            _groupService.Delete(id);
-            Helper.ColorWrite(ConsoleColor.Green, "Group deleted successfully!");
-            Helper.PlaySound("notify.wav");
-        }
-        catch (Exception ex)
-        {
-            Helper.ColorWrite(ConsoleColor.Red, ex.Message);
-            Helper.PlaySound("chord.wav");
+                // ID-nin mövcud olub-olmadığını yoxlayırıq
+                var existing = _groupService.GetById(id);
+
+                _groupService.Delete(id);
+                Helper.ColorWrite(ConsoleColor.Green, "Group deleted successfully!");
+                Helper.PlaySound("notify.wav");
+                break;
+            }
+            catch (NotFoundException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
+            catch (ArgumentException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
         }
     }
+
 
     public void GetGroupById()
     {
-        int id = Helper.ReadValidatedInt("Enter group ID:");
+        int id = Helper.CheckInt("Enter group ID:");
 
         try
         {
@@ -238,13 +289,13 @@ public class AppController
     {
         Console.WriteLine("--- Create New Student ---");
         Console.Write("Enter student name: ");
-        string name = Helper.ReadValidatedString("Name is not valid. Enter again:");
+        string name = Helper.CheckString("Name is not valid. Enter again:");
         Console.Write("Enter student surname: ");
-        string surname = Helper.ReadValidatedString("Surname is not valid. Enter again:");
+        string surname = Helper.CheckString("Surname is not valid. Enter again:");
         Console.Write("Enter student age: ");
-        int age = Helper.ReadValidatedInt("Age must be a valid number. Enter again:");
+        int age = Helper.CheckInt("Age must be a valid number. Enter again:");
         Console.Write("Enter group ID: ");
-        int groupId = Helper.ReadValidatedInt("Group ID must be a valid number. Enter again:");
+        int groupId = Helper.CheckInt("Group ID must be a valid number. Enter again:");
 
         try
         {
@@ -261,45 +312,95 @@ public class AppController
 
     public void UpdateStudent()
     {
-        Console.WriteLine("--- Update Student ---");
-        Console.Write("Enter student ID to update: ");
-        int id = Helper.ReadValidatedInt("ID must be a valid number. Enter again:");
-        Console.Write("Enter new student name: ");
-        string newName = Helper.ReadValidatedString("Name is not valid. Enter again:");
-        Console.Write("Enter new student surname: ");
-        string newSurname = Helper.ReadValidatedString("Surname is not valid. Enter again:");
-        Console.Write("Enter new student age: ");
-        int newAge = Helper.ReadValidatedInt("Age must be a valid number. Enter again:");
+        while (true)
+        {
+            try
+            {
+                Console.WriteLine("--- Update Student ---");
+                Console.Write("Enter student ID to update: ");
+                int id = Helper.CheckInt("ID must be a valid number. Enter again:");
 
-        try
-        {
-            _studentService.Update(id, new Student { Name = newName, Surname = newSurname, Age = newAge });
-            Helper.ColorWrite(ConsoleColor.Green, "Student updated successfully!");
-            Helper.PlaySound("notify.wav");
-        }
-        catch (Exception ex)
-        {
-            Helper.ColorWrite(ConsoleColor.Red, ex.Message);
-            Helper.PlaySound("chord.wav");
+                // Ən başda yoxlama
+                var existing = _studentService.GetById(id);
+
+                Console.Write("Enter new student name (or leave empty): ");
+                string newName = Console.ReadLine();
+                Console.Write("Enter new student surname (or leave empty): ");
+                string newSurname = Console.ReadLine();
+                Console.Write("Enter new student age (or leave empty): ");
+                string ageInput = Console.ReadLine();
+                int newAge = 0;
+                if (!string.IsNullOrWhiteSpace(ageInput))
+                {
+                    if (!int.TryParse(ageInput, out newAge))
+                        throw new ArgumentException("Age must be a valid number!");
+                }
+
+                var studentToUpdate = new Student
+                {
+                    Name = newName,
+                    Surname = newSurname,
+                    Age = newAge > 0 ? newAge : existing.Age,
+                    Group = existing.Group // default, changed only if user provides new group later
+                };
+
+                _studentService.Update(id, studentToUpdate);
+                Helper.ColorWrite(ConsoleColor.Green, "Student updated successfully!");
+                Helper.PlaySound("notify.wav");
+                break;
+            }
+            catch (NotFoundException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please enter a valid ID or press '0' to cancel:");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
+            catch (ArgumentException ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
+            catch (Exception ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                var input = Console.ReadLine();
+                if (input == "0") break;
+            }
         }
     }
 
+
     public void DeleteStudent()
     {
-        Console.WriteLine("--- Delete Student ---");
-        Console.Write("Enter student ID to delete: ");
-        int id = Helper.ReadValidatedInt("ID must be a valid number. Enter again:");
+        while (true)
+        {
+            try
+            {
+                Console.WriteLine("--- Delete Student ---");
+                Console.Write("Enter student ID to delete: ");
+                int id = Helper.CheckInt("ID must be a valid number. Enter again:");
 
-        try
-        {
-            _studentService.Delete(id);
-            Helper.ColorWrite(ConsoleColor.Green, "Student deleted successfully!");
-            Helper.PlaySound("notify.wav");
-        }
-        catch (Exception ex)
-        {
-            Helper.ColorWrite(ConsoleColor.Red, ex.Message);
-            Helper.PlaySound("chord.wav");
+                _studentService.Delete(id);
+                Helper.ColorWrite(ConsoleColor.Green, "Student deleted successfully!");
+                Helper.PlaySound("notify.wav");
+                break;
+            }
+            catch (Exception ex)
+            {
+                Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+                Helper.PlaySound("chord.wav");
+                Console.WriteLine("Please try again or press '0' to cancel.");
+                string input = Console.ReadLine();
+                if (input == "0")
+                    break;
+            }
         }
     }
 
@@ -307,7 +408,7 @@ public class AppController
     {
         Console.WriteLine("--- View Student Details ---");
         Console.Write("Enter student ID: ");
-        int id = Helper.ReadValidatedInt("ID must be a valid number. Enter again:");
+        int id = Helper.CheckInt("ID must be a valid number. Enter again:");
 
         try
         {
@@ -322,13 +423,28 @@ public class AppController
         }
     }
 
-  
+    public void GetAllStudents()
+    {
+        Console.WriteLine("--- List All Students ---");
+        try
+        {
+            var list = _studentService.GetAllStudents();
+            foreach (var s in list)
+                Console.WriteLine($"ID: {s.Id} | Name: {s.Name} {s.Surname} | Age: {s.Age} | Group: {s.Group?.Name}");
+            Helper.PlaySound("notify.wav");
+        }
+        catch (Exception ex)
+        {
+            Helper.ColorWrite(ConsoleColor.Red, ex.Message);
+            Helper.PlaySound("chord.wav");
+        }
+    }
 
     public void GetStudentsByAge()
     {
         Console.WriteLine("--- List Students by Age ---");
         Console.Write("Enter age: ");
-        int age = Helper.ReadValidatedInt("Age must be a valid number. Enter again:");
+        int age = Helper.CheckInt("Age must be a valid number. Enter again:");
 
         try
         {
@@ -348,7 +464,7 @@ public class AppController
     {
         Console.WriteLine("--- List Students by Group ---");
         Console.Write("Enter group ID: ");
-        int groupId = Helper.ReadValidatedInt("Group ID must be a valid number. Enter again:");
+        int groupId = Helper.CheckInt("Group ID must be a valid number. Enter again:");
 
         try
         {
@@ -395,9 +511,10 @@ public class AppController
             Console.WriteLine("2. Update");
             Console.WriteLine("3. Delete");
             Console.WriteLine("4. GetById");
-            Console.WriteLine("5. GetAllByAge");
-            Console.WriteLine("6. GetAllByGroupId");
-            Console.WriteLine("7. SearchByNameOrSurname");
+            Console.WriteLine("5. GetAllStudents");
+            Console.WriteLine("6. GetAllByAge");
+            Console.WriteLine("7. GetAllByGroupId");
+            Console.WriteLine("8. SearchByNameOrSurname");
             Console.WriteLine("0. Back");
             Console.ResetColor();
 
@@ -423,12 +540,15 @@ public class AppController
                     GetStudentById();
                     break;
                 case 5:
-                    GetStudentsByAge();
+                    GetAllStudents();
                     break;
                 case 6:
-                    GetStudentsByGroup();
+                    GetStudentsByAge();
                     break;
                 case 7:
+                    GetStudentsByGroup();
+                    break;
+                case 8:
                     SearchStudents();
                     break;
                 case 0:

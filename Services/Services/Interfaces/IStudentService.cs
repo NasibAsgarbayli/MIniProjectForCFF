@@ -8,6 +8,7 @@ public interface IStudentService
     void Update(int id, Student student);
     void Delete(int id);
     Student GetById(int id);
+    List<Student> GetAllStudents();
     List<Student> GetAllByAge(int age);
     List<Student> GetAllByGroupId(int groupId);
     List<Student> SearchByNameOrSurname(string keyword);
